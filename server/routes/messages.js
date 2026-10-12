@@ -32,6 +32,16 @@ router.post("/", async (req, res) => {
       ]
     );
 
+    await pool.query(
+      `INSERT INTO notifications
+        (user_id, sender_id, conversation_id, message_id, notification_type, content)
+       SELECT user_id, $1, $2, $3, 'message', $4
+       FROM conversation_members
+       WHERE conversation_id = $2
+         AND user_id <> $1`,
+      [sender_id, conversation_id, result.rows[0].id, content]
+    );
+
     res.status(201).json({
       message: "Message sent successfully!",
       data: result.rows[0]

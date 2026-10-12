@@ -9,6 +9,9 @@ const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/messages");
 const conversationRoutes = require("./routes/conversations");
 const contactRoutes = require("./routes/contacts");
+const notificationRoutes = require("./routes/notifications");
+const profileRoutes = require("./routes/profile");
+const authMiddleware = require("./middleware/authMiddleware");
 
 const app = express();
 const server = http.createServer(app);
@@ -54,6 +57,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/conversations", conversationRoutes);
 app.use("/api/contacts", contactRoutes);
+app.use("/api/notifications", authMiddleware, notificationRoutes);
+app.use("/api/profile", authMiddleware, profileRoutes);
 
 // ==========================================
 // TEST API
